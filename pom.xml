@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.cloudbees.flowpdf</groupId>
+  <artifactId>EC-DelineaSecretServer</artifactId>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
+
+  <name>EC-DelineaSecretServer</name>
+  <description>CloudBees CD/RO Plugin for Delinea Secret Server</description>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+    <groovy.version>3.0.19</groovy.version>
+    <spock.version>2.3-groovy-3.0</spock.version>
+    <junit.jupiter.version>5.9.3</junit.jupiter.version>
+    <gmavenplus.version>3.0.2</gmavenplus.version>
+  </properties>
+
+  <dependencies>
+    <!-- Groovy 3 Runtime -->
+    <dependency>
+      <groupId>org.codehaus.groovy</groupId>
+      <artifactId>groovy</artifactId>
+      <version>${groovy.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.groovy</groupId>
+      <artifactId>groovy-json</artifactId>
+      <version>${groovy.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.groovy</groupId>
+      <artifactId>groovy-templates</artifactId>
+      <version>${groovy.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.groovy</groupId>
+      <artifactId>groovy-xml</artifactId>
+      <version>${groovy.version}</version>
+    </dependency>
+
+    <!-- Test Dependencies (Spock & JUnit) -->
+    <dependency>
+      <groupId>org.spockframework</groupId>
+      <artifactId>spock-core</artifactId>
+      <version>${spock.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>${junit.jupiter.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>${junit.jupiter.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.2</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>EC-DelineaSecretServer-1.0.0</finalName>
+
+    <!-- Package CDRO resource directories (config, dsl, forms) into the jar -->
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <directory>config</directory>
+        <targetPath>config</targetPath>
+      </resource>
+      <resource>
+        <directory>dsl</directory>
+        <targetPath>dsl</targetPath>
+      </resource>
+      <resource>
+        <directory>forms</directory>
+        <targetPath>forms</targetPath>
+      </resource>
+    </resources>
+
+    <plugins>
+      <!-- GMavenPlus Plugin to compile Groovy code & Spock tests -->
+      <plugin>
+        <groupId>org.codehaus.gmavenplus</groupId>
+        <artifactId>gmavenplus-plugin</artifactId>
+        <version>${gmavenplus.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>addSources</goal>
+              <goal>addTestSources</goal>
+              <goal>compile</goal>
+              <goal>compileTests</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Java Compiler Plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.13.0</version>
+        <configuration>
+          <release>11</release>
+        </configuration>
+      </plugin>
+
+      <!-- Surefire Test Runner for Spock Specifications -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.2.5</version>
+        <configuration>
+          <includes>
+            <include>**/*Spec.java</include>
+            <include>**/*Spec.groovy</include>
+            <include>**/*Test.java</include>
+            <include>**/*Test.groovy</include>
+          </includes>
+        </configuration>
+      </plugin>
+
+      <!-- Jar Plugin with CDRO Plugin MANIFEST.MF -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.4.1</version>
+        <configuration>
+          <archive>
+            <manifestFile>META-INF/MANIFEST.MF</manifestFile>
+          </archive>
+        </configuration>
+      </plugin>
+
+      <!-- AntRun Plugin to synchronize jar to build/plugins directory -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>copy-plugin-jar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <mkdir dir="${project.basedir}/build/plugins"/>
+                <copy file="${project.build.directory}/${project.build.finalName}.jar"
+                      tofile="${project.basedir}/build/plugins/${project.build.finalName}.jar"/>
+                <echo message="------------------------------------------------------------"/>
+                <echo message=" CDRO Plugin archive created at:"/>
+                <echo message="   ${project.basedir}/build/plugins/${project.build.finalName}.jar"/>
+                <echo message="   ${project.build.directory}/${project.build.finalName}.jar"/>
+                <echo message=" Install with:"/>
+                <echo message="   ectool installPlugin ${project.basedir}/build/plugins/${project.build.finalName}.jar"/>
+                <echo message="------------------------------------------------------------"/>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
