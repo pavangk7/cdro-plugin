@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.cloudbees.flowpdf.components.delinea.DelineaConfigSpec" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-10-26T20:03:47.368Z" hostname="Mac" time="0.009">
+  <properties/>
+  <testcase name="should correctly normalize endpoint URLs [input: https://tenant.secretservercloud.com/, expected: https://tenant.secretservercloud.com, #0]" classname="com.cloudbees.flowpdf.components.delinea.DelineaConfigSpec" time="0.001"/>
+  <testcase name="should correctly normalize endpoint URLs [input: https://secrets.internal.corp/SecretServer///, expected: https://secrets.internal.corp/SecretServer, #1]" classname="com.cloudbees.flowpdf.components.delinea.DelineaConfigSpec" time="0.0"/>
+  <testcase name="should correctly normalize endpoint URLs [input: http://secrets.internal.corp:8080/SecretServer, expected: http://secrets.internal.corp:8080/SecretServer, #2]" classname="com.cloudbees.flowpdf.components.delinea.DelineaConfigSpec" time="0.0"/>
+  <testcase name="should correctly normalize endpoint URLs [input: tenant.secretservercloud.com, expected: https://tenant.secretservercloud.com, #3]" classname="com.cloudbees.flowpdf.components.delinea.DelineaConfigSpec" time="0.0"/>
+  <testcase name="should throw exception when endpoint is missing" classname="com.cloudbees.flowpdf.components.delinea.DelineaConfigSpec" time="0.001"/>
+  <testcase name="should populate config from property map" classname="com.cloudbees.flowpdf.components.delinea.DelineaConfigSpec" time="0.004"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

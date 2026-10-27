@@ -1,0 +1,17 @@
+¡  [Saved to File] Saved field 'private-key' to '/var/folders/4h/g0fs8wwj2pg62ynzz09qz3rh0000gn/T/delinea-testssh9324700586113581406/id_rsa' (Permissions: 0600).
+¡  [Saved to File] Saved field 'apiKey' to '/var/folders/4h/g0fs8wwj2pg62ynzz09qz3rh0000gn/T/delinea-testauto12173059694397187973/token.txt' (Permissions: 0644).
+;==========================================================
+4 Delinea Secret Server - Restore .pem Key Procedure
+;==========================================================
+QReading .pem private key from property [/myPipelineRuntime/delineaSecret/pem]...
+¨Successfully restored .pem key (95 chars) to '/var/folders/4h/g0fs8wwj2pg62ynzz09qz3rh0000gn/T/restore-pem-test635091647859307452/bastion.pem' with permissions '0600'.
+;==========================================================
+4 Delinea Secret Server - Restore .pem Key Procedure
+;==========================================================
+QReading .pem private key from property [/myPipelineRuntime/delineaSecret/pem]...
+TFound .pem key in fallback property [/myPipelineRuntime/delineaSecret/private-key].
+ªSuccessfully restored .pem key (74 chars) to '/var/folders/4h/g0fs8wwj2pg62ynzz09qz3rh0000gn/T/restore-fallback8443092131918068014/fallback.pem' with permissions '0600'.
+;==========================================================
+4 Delinea Secret Server - Restore .pem Key Procedure
+;==========================================================
+QReading .pem private key from property [/myPipelineRuntime/delineaSecret/pem]...

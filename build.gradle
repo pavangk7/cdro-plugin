@@ -1,0 +1,63 @@
+plugins {
+    id 'groovy'
+}
+
+group = 'com.cloudbees.flowpdf'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'org.codehaus.groovy:groovy-all:3.0.19'
+
+    testImplementation 'org.codehaus.groovy:groovy-all:3.0.19'
+    testImplementation 'org.spockframework:spock-core:2.3-groovy-3.0'
+    testImplementation 'junit:junit:4.13.2'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+/**
+ * Packages the CDRO plugin into a deployable .zip / .jar archive compatible with ectool installPlugin.
+ */
+task packagePlugin(type: Zip) {
+    archiveBaseName = 'EC-DelineaSecretServer'
+    archiveVersion = version
+    archiveExtension = 'jar'
+    destinationDirectory = file("${buildDir}/plugins")
+
+    from(sourceSets.main.output)
+    from('config') {
+        into 'config'
+    }
+    from('dsl') {
+        into 'dsl'
+    }
+    from('forms') {
+        into 'forms'
+    }
+    from('META-INF') {
+        into 'META-INF'
+    }
+    from('src/main/resources') {
+        into ''
+    }
+
+    doLast {
+        println "------------------------------------------------------------"
+        println " CDRO Plugin archive created at: "
+        println " ${archiveFile.get().asFile.absolutePath}"
+        println " Install with: "
+        println " ectool installPlugin ${archiveFile.get().asFile.absolutePath}"
+        println "------------------------------------------------------------"
+    }
+}
+
+build.dependsOn packagePlugin

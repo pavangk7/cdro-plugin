@@ -1,0 +1,28 @@
+<editor>
+  <help>https://docs.delinea.com/</help>
+  <formElement>
+    <type>select</type>
+    <label>Configuration Name:</label>
+    <property>config</property>
+    <required>1</required>
+    <documentation>Select the Delinea Secret Server configuration to test.</documentation>
+    <optionQuery>
+      <query>findObjects</query>
+      <filter>
+        <propertyName>projectName</propertyName>
+        <operator>equals</operator>
+        <operand>/plugins/@PLUGIN_NAME@/project</operand>
+      </filter>
+      <filter>
+        <propertyName>parent</propertyName>
+        <operator>equals</operator>
+        <operand>/plugins/@PLUGIN_NAME@/project/ec_plugin_cfgs</operand>
+      </filter>
+      <objectType>propertySheet</objectType>
+      <sort>
+        <propertyName>propertyName</propertyName>
+        <order>ascending</order>
+      </sort>
+    </optionQuery>
+  </formElement>
+</editor>

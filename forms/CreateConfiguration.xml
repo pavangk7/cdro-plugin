@@ -1,0 +1,88 @@
+<editor>
+  <help>https://docs.delinea.com/</help>
+  <formElement>
+    <type>entry</type>
+    <label>Configuration Name:</label>
+    <property>config</property>
+    <required>1</required>
+    <documentation>A unique name for this Delinea Secret Server configuration.</documentation>
+  </formElement>
+  <formElement>
+    <type>entry</type>
+    <label>Description:</label>
+    <property>desc</property>
+    <required>0</required>
+    <documentation>Optional description of this configuration.</documentation>
+  </formElement>
+  <formElement>
+    <type>entry</type>
+    <label>Delinea Secret Server URL:</label>
+    <property>endpoint</property>
+    <required>1</required>
+    <documentation>The base URL of Delinea Secret Server (e.g. https://tenant.secretservercloud.com or https://secrets.internal.corp/SecretServer).</documentation>
+  </formElement>
+  <formElement>
+    <type>entry</type>
+    <label>OAuth2 Token URL (Optional):</label>
+    <property>tokenUrl</property>
+    <required>0</required>
+    <documentation>Optional custom OAuth2 token URL. If omitted, the plugin automatically appends '/oauth2/token' to the Delinea Secret Server URL.</documentation>
+  </formElement>
+  <formElement>
+    <type>select</type>
+    <label>Authentication Method:</label>
+    <property>authType</property>
+    <required>1</required>
+    <value>oauth2_password</value>
+    <documentation>OAuth2 authentication mechanism.</documentation>
+    <option>
+      <name>OAuth2 Password Grant (Username &amp; Password)</name>
+      <value>oauth2_password</value>
+    </option>
+    <option>
+      <name>OAuth2 Client Credentials (API Client ID &amp; Secret)</name>
+      <value>oauth2_client_credentials</value>
+    </option>
+  </formElement>
+  <formElement>
+    <type>credential</type>
+    <label>Credential:</label>
+    <property>credential</property>
+    <required>1</required>
+    <documentation>Username/Password or API Client ID/Secret for Delinea Secret Server.</documentation>
+  </formElement>
+  <formElement>
+    <type>entry</type>
+    <label>Active Directory / Local Domain:</label>
+    <property>domain</property>
+    <required>0</required>
+    <documentation>Domain name if authenticating using Active Directory credentials (for OAuth2 password grant).</documentation>
+  </formElement>
+  <formElement>
+    <type>checkbox</type>
+    <label>Verify SSL/TLS Certificate:</label>
+    <property>sslVerify</property>
+    <checkedValue>true</checkedValue>
+    <uncheckedValue>false</uncheckedValue>
+    <value>true</value>
+    <required>0</required>
+    <documentation>Verify server SSL/TLS certificates. Uncheck only for private dev environments with self-signed certs.</documentation>
+  </formElement>
+  <formElement>
+    <type>entry</type>
+    <label>HTTP Proxy URL:</label>
+    <property>httpProxy</property>
+    <required>0</required>
+    <documentation>Optional outbound proxy URL (e.g., http://proxy.company.com:8080).</documentation>
+  </formElement>
+  <formElement>
+    <type>checkbox</type>
+    <label>Test Connection on Save:</label>
+    <property>checkConnection</property>
+    <checkedValue>true</checkedValue>
+    <uncheckedValue>false</uncheckedValue>
+    <value>true</value>
+    <required>0</required>
+    <documentation>Attempt connection and authentication before saving configuration.</documentation>
+  </formElement>
+</editor>

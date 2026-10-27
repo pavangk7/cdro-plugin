@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.cloudbees.flowpdf.components.delinea.DelineaClientSpec" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-26T20:03:46.866Z" hostname="Mac" time="0.491">
+  <properties/>
+  <testcase name="should authenticate and parse OAuth2 access token" classname="com.cloudbees.flowpdf.components.delinea.DelineaClientSpec" time="0.414"/>
+  <testcase name="should retrieve secret and normalize fields properly" classname="com.cloudbees.flowpdf.components.delinea.DelineaClientSpec" time="0.043"/>
+  <testcase name="should fetch SSH Key / Private Key secret and alias all slug formats" classname="com.cloudbees.flowpdf.components.delinea.DelineaClientSpec" time="0.012"/>
+  <testcase name="should fetch API Key secret and normalize token fields" classname="com.cloudbees.flowpdf.components.delinea.DelineaClientSpec" time="0.006"/>
+  <testcase name="should download file attachment bytes from field endpoint" classname="com.cloudbees.flowpdf.components.delinea.DelineaClientSpec" time="0.006"/>
+  <testcase name="should throw NoSuchElementException when secret ID is not found (404)" classname="com.cloudbees.flowpdf.components.delinea.DelineaClientSpec" time="0.006"/>
+  <testcase name="should correctly resolve default and custom tokenUrl and normalize endpoint" classname="com.cloudbees.flowpdf.components.delinea.DelineaClientSpec" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

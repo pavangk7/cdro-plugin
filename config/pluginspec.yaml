@@ -1,0 +1,322 @@
+pluginInfo:
+  pluginName: 'EC-DelineaSecretServer'
+  version: '1.0.0'
+  description: 'Integrates CloudBees Continuous Delivery / Release Orchestration (CD/RO) with Delinea Secret Server to fetch secrets and manage credentials in automated pipelines and release workflows.'
+  author: 'Enterprise Integrations'
+  category: 'Resource Management'
+  shell: 'ec-groovy'
+  hasConfigurations: true
+
+configuration:
+  checkConnection: true
+  hasDebugLevel: true
+  parameters:
+    - name: config
+      label: Configuration Name
+      documentation: 'Unique name identifying this Delinea Secret Server configuration.'
+      type: entry
+      required: true
+
+    - name: desc
+      label: Description
+      documentation: 'Optional descriptive summary of this configuration.'
+      type: entry
+      required: false
+
+    - name: endpoint
+      label: Delinea Secret Server URL
+      documentation: 'The base URL for Delinea Secret Server (e.g., https://mytenant.secretservercloud.com or https://secrets.corp.internal/SecretServer).'
+      type: entry
+      required: true
+
+    - name: tokenUrl
+      label: OAuth2 Token URL
+      documentation: 'Optional custom OAuth2 token endpoint URL. If omitted, defaults to <endpoint>/oauth2/token.'
+      type: entry
+      required: false
+
+    - name: authType
+      label: Authentication Method
+      documentation: 'OAuth2 authentication flow: User Password grant or Service Client Credentials grant.'
+      type: select
+      options:
+        - value: 'oauth2_password'
+          text: 'OAuth2 Password Grant (Username & Password)'
+        - value: 'oauth2_client_credentials'
+          text: 'OAuth2 Client Credentials (API Client ID & Secret)'
+      default: 'oauth2_password'
+      required: true
+
+    - name: credential
+      label: Credential
+      documentation: 'CDRO credential holding Username/Password or ClientID/ClientSecret for Delinea.'
+      type: credential
+      required: true
+
+    - name: domain
+      label: Active Directory / Local Domain
+      documentation: 'Optional domain name if authenticating using Active Directory via OAuth2 Password grant.'
+      type: entry
+      required: false
+
+    - name: sslVerify
+      label: Verify SSL / TLS Certificate
+      documentation: 'Whether to enforce TLS/SSL certificate validation. Uncheck only for private lab/self-signed certs.'
+      type: checkbox
+      checked: true
+      required: false
+
+    - name: httpProxy
+      label: HTTP Proxy URL
+      documentation: 'Optional outbound HTTP/HTTPS proxy server (e.g., http://proxy.corp.internal:8080).'
+      type: entry
+      required: false
+
+procedures:
+  - name: 'CheckConnection'
+    description: 'Validates connectivity and authentication against the Delinea Secret Server instance.'
+    hasConfig: true
+    parameters:
+      - name: config
+        label: Configuration Name
+        documentation: 'Name of the Delinea Secret Server configuration to test.'
+        type: entry
+        required: true
+
+  - name: 'GetSecret'
+    description: 'Retrieves a secret from Delinea Secret Server by ID or Path and populates CDRO job properties and/or dynamic credentials.'
+    hasConfig: true
+    parameters:
+      - name: config
+        label: Configuration Name
+        documentation: 'Name of the Delinea Secret Server configuration to use.'
+        type: entry
+        required: true
+
+      - name: secretId
+        label: Secret ID
+        documentation: 'Numeric ID of the secret in Delinea Secret Server (e.g., 2048 for SSH Keys, 1042 for DB/API credentials). Required if Secret Path is not provided.'
+        type: entry
+        required: false
+
+      - name: secretPath
+        label: Secret Path
+        documentation: 'Full path or search lookup expression (e.g., /DevOps/AWS/ProdDeployer). Used if Secret ID is omitted.'
+        type: entry
+        required: false
+
+      - name: fieldNames
+        label: Fields to Extract
+        documentation: 'Comma-separated list of field slugs or names to retrieve (e.g., username,password,api_key). Leave empty to extract all secret fields.'
+        type: entry
+        required: false
+
+      - name: resultPropertySheet
+        label: Output Property Sheet
+        documentation: 'Path to the CDRO property sheet where extracted secret values will be written. Defaults to /myJob/delineaSecret.'
+        type: entry
+        default: '/myJob/delineaSecret'
+        required: false
+
+      - name: exportToPipeline
+        label: Export to Pipeline Runtime
+        documentation: 'If checked, automatically publishes all secret fields, slug aliases, and .pem key to /myPipelineRuntime so they are accessible across all stages and tasks in the pipeline.'
+        type: checkbox
+        checked: true
+        required: false
+
+      - name: pipelinePropertySheet
+        label: Pipeline Property Sheet
+        documentation: 'Target path on /myPipelineRuntime where secret properties and .pem key will be stored (defaults to /myPipelineRuntime/delineaSecret).'
+        type: entry
+        default: '/myPipelineRuntime/delineaSecret'
+        required: false
+
+      - name: destinationFilePath
+        label: Destination File Path
+        documentation: 'Optional file path on the CDRO agent to write a secret field (e.g. ~/.ssh/id_rsa, /tmp/cert.pem, or apikey.txt).'
+        type: entry
+        required: false
+
+      - name: fileFieldName
+        label: File Field Slug
+        documentation: 'Field slug to write to the Destination File Path (e.g. private-key, certificate-file, apiKey). Auto-detected if omitted.'
+        type: entry
+        required: false
+
+      - name: filePermissions
+        label: File Permissions
+        documentation: 'POSIX permissions for the saved file (e.g. 0600 for SSH keys, 0644 for general files).'
+        type: entry
+        default: '0600'
+        required: false
+
+      - name: fetchFileContent
+        label: Fetch File Attachments
+        documentation: 'Whether to automatically download binary/text file attachment contents from Delinea.'
+        type: checkbox
+        checked: true
+        required: false
+
+      - name: createJobCredential
+        label: Create Job Credential
+        documentation: 'If checked, automatically creates a dynamic CDRO job-level credential using the retrieved username and password fields.'
+        type: checkbox
+        checked: false
+        required: false
+
+      - name: credentialName
+        label: Job Credential Name
+        documentation: 'Name of the CDRO job credential to create (required if Create Job Credential is checked).'
+        type: entry
+        required: false
+
+      - name: credentialUserField
+        label: Username Field Name
+        documentation: 'Field slug to map to the credential username (defaults to "username").'
+        type: entry
+        default: 'username'
+        required: false
+
+      - name: credentialPasswordField
+        label: Password Field Name
+        documentation: 'Field slug to map to the credential password (defaults to "password").'
+        type: entry
+        default: 'password'
+        required: false
+
+      - name: maskPasswords
+        label: Mask Passwords in Output
+        documentation: 'If checked, masks secret field values in CDRO execution logs and summaries.'
+        type: checkbox
+        checked: true
+        required: false
+
+  - name: 'DownloadSecretFile'
+    description: 'Downloads a file attachment, certificate, or private key from Delinea Secret Server directly to the local agent filesystem.'
+    hasConfig: true
+    parameters:
+      - name: config
+        label: Configuration Name
+        documentation: 'Name of the Delinea Secret Server configuration to use.'
+        type: entry
+        required: true
+
+      - name: secretId
+        label: Secret ID
+        documentation: 'Numeric ID of the secret in Delinea Secret Server (e.g., 2048 for SSH Keys, 1042 for files/certificates).'
+        type: entry
+        required: false
+
+      - name: secretPath
+        label: Secret Path
+        documentation: 'Full path or unique name to lookup the secret (e.g., /DevOps/SSH/BastionKey). Used if Secret ID is omitted.'
+        type: entry
+        required: false
+
+      - name: fieldSlug
+        label: Field Slug
+        documentation: 'Slug of the file attachment or private key field (e.g., private-key, certificate-file). Leave blank to auto-detect.'
+        type: entry
+        required: false
+
+      - name: destinationPath
+        label: Destination Path
+        documentation: 'Local file path or directory on the CDRO agent where the file will be saved (e.g., ~/.ssh/id_rsa or /tmp/certs).'
+        type: entry
+        required: true
+
+      - name: filePermissions
+        label: File Permissions
+        documentation: 'POSIX permissions for the saved file (e.g., 0600 for SSH keys, 0644 for general files).'
+        type: entry
+        default: '0600'
+        required: false
+
+      - name: overwrite
+        label: Overwrite Existing File
+        documentation: 'Whether to overwrite destination file if it already exists.'
+        type: checkbox
+        checked: true
+        required: false
+
+      - name: resultPropertySheet
+        label: Output Property Sheet
+        documentation: 'Path to the CDRO property sheet where file download metadata (filePath, fileName, fileSize) will be saved.'
+        type: entry
+        default: '/myJob/delineaDownloadedFile'
+        required: false
+
+  - name: 'RestorePemKey'
+    description: 'Restores a .pem private key from pipeline runtime properties and saves it to a file with 0600 permissions on the current agent workspace.'
+    hasConfig: false
+    parameters:
+      - name: pemKeyProperty
+        label: .PEM Key Property Path
+        documentation: 'Property path containing the .pem key content (default: /myPipelineRuntime/delineaSecret/pem).'
+        type: entry
+        default: '/myPipelineRuntime/delineaSecret/pem'
+        required: false
+
+      - name: destinationFilePath
+        label: Destination File Path
+        documentation: 'File path on the agent where the .pem key will be written (e.g. ~/.ssh/id_rsa or /tmp/delinea.pem).'
+        type: entry
+        required: true
+
+      - name: filePermissions
+        label: File Permissions
+        documentation: 'POSIX permissions for the written file (default: 0600 for SSH private keys).'
+        type: entry
+        default: '0600'
+        required: false
+
+      - name: overwrite
+        label: Overwrite Existing File
+        documentation: 'Whether to overwrite destination file if it already exists.'
+        type: checkbox
+        checked: true
+        required: false
+
+      - name: resultPropertySheet
+        label: Output Property Sheet
+        documentation: 'CDRO property sheet where output metadata (filePath, fileSize, permissions) will be saved.'
+        type: entry
+        default: '/myJob/pemFile'
+        required: false
+
+  - name: 'SearchSecrets'
+    description: 'Searches for secrets in Delinea Secret Server matching a text query or folder.'
+    hasConfig: true
+    parameters:
+      - name: config
+        label: Configuration Name
+        documentation: 'Name of the Delinea Secret Server configuration to use.'
+        type: entry
+        required: true
+
+      - name: searchText
+        label: Search Query
+        documentation: 'Keyword or search term to match against secret names, templates, or descriptions.'
+        type: entry
+        required: true
+
+      - name: folderId
+        label: Folder ID Filter
+        documentation: 'Optional numeric folder ID to restrict the search within a specific folder hierarchy.'
+        type: entry
+        required: false
+
+      - name: maxResults
+        label: Maximum Results
+        documentation: 'Maximum number of matching secrets to return (defaults to 25).'
+        type: entry
+        default: '25'
+        required: false
+
+      - name: resultPropertySheet
+        label: Output Property Sheet
+        documentation: 'Path to the CDRO property sheet where search results will be saved as JSON and indexed properties.'
+        type: entry
+        default: '/myJob/delineaSearchResults'
+        required: false

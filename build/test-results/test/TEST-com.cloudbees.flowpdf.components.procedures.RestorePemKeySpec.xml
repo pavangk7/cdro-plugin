@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.cloudbees.flowpdf.components.procedures.RestorePemKeySpec" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-26T20:03:47.454Z" hostname="Mac" time="0.024">
+  <properties/>
+  <testcase name="should read .pem key from pipeline property and save to disk with 0600 permissions" classname="com.cloudbees.flowpdf.components.procedures.RestorePemKeySpec" time="0.013"/>
+  <testcase name="should fallback to alternative property locations if primary property is empty" classname="com.cloudbees.flowpdf.components.procedures.RestorePemKeySpec" time="0.006"/>
+  <testcase name="should throw IllegalStateException if no .pem content is found" classname="com.cloudbees.flowpdf.components.procedures.RestorePemKeySpec" time="0.004"/>
+  <system-out><![CDATA[==========================================================
+ Delinea Secret Server - Restore .pem Key Procedure
+==========================================================
+Reading .pem private key from property [/myPipelineRuntime/delineaSecret/pem]...
+Successfully restored .pem key (95 chars) to '/var/folders/4h/g0fs8wwj2pg62ynzz09qz3rh0000gn/T/restore-pem-test635091647859307452/bastion.pem' with permissions '0600'.
+==========================================================
+ Delinea Secret Server - Restore .pem Key Procedure
+==========================================================
+Reading .pem private key from property [/myPipelineRuntime/delineaSecret/pem]...
+Found .pem key in fallback property [/myPipelineRuntime/delineaSecret/private-key].
+Successfully restored .pem key (74 chars) to '/var/folders/4h/g0fs8wwj2pg62ynzz09qz3rh0000gn/T/restore-fallback8443092131918068014/fallback.pem' with permissions '0600'.
+==========================================================
+ Delinea Secret Server - Restore .pem Key Procedure
+==========================================================
+Reading .pem private key from property [/myPipelineRuntime/delineaSecret/pem]...
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Plugin-Name: EC-DelineaSecretServer
+Plugin-Version: 1.0.0
+Plugin-Category: Resource Management
+Plugin-Description: CloudBees CD/RO integration with Delinea Secret Server.
+Created-By: CloudBees Flow Plugin Framework
