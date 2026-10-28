@@ -21,7 +21,14 @@ if [ -z "$JAVA_HOME" ] || [ ! -d "$JAVA_HOME" ]; then
     fi
 fi
 
-if command -v gradle >/dev/null 2>&1; then
+# Detect build tool: Maven or Gradle
+if [ "$1" = "--maven" ] || command -v mvn >/dev/null 2>&1; then
+    echo "Building using Maven (mvn clean package)..."
+    mvn clean package -DskipTests
+elif [ -f "./mvnw" ]; then
+    echo "Building using Maven Wrapper (./mvnw clean package)..."
+    ./mvnw clean package -DskipTests
+elif command -v gradle >/dev/null 2>&1; then
     echo "Building using Gradle..."
     gradle packagePlugin
 elif [ -f "./gradlew" ]; then

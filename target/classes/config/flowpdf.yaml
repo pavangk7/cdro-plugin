@@ -1,0 +1,5 @@
+flowpdf:
+  version: '1.2.0'
+  language: 'groovy'
+  framework: 'groovy'
+  pdkVersion: '1.2.0'

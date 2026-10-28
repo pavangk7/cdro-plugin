@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="maven-antrun-" default="main">
+  <target name="main">
+    <mkdir dir="/Users/pavangk7/code/EC-DelineaSecretServer/build/plugins" />
+    <copy file="/Users/pavangk7/code/EC-DelineaSecretServer/target/EC-DelineaSecretServer-1.0.0.jar" tofile="/Users/pavangk7/code/EC-DelineaSecretServer/build/plugins/EC-DelineaSecretServer-1.0.0.jar" />
+    <echo message="------------------------------------------------------------" />
+    <echo message=" CDRO Plugin archive created at:" />
+    <echo message="   /Users/pavangk7/code/EC-DelineaSecretServer/build/plugins/EC-DelineaSecretServer-1.0.0.jar" />
+    <echo message="   /Users/pavangk7/code/EC-DelineaSecretServer/target/EC-DelineaSecretServer-1.0.0.jar" />
+    <echo message=" Install with:" />
+    <echo message="   ectool installPlugin /Users/pavangk7/code/EC-DelineaSecretServer/build/plugins/EC-DelineaSecretServer-1.0.0.jar" />
+    <echo message="------------------------------------------------------------" />
+  </target>
+</project>

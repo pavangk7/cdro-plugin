@@ -1,0 +1,44 @@
+<editor>
+  <help>https://docs.delinea.com/</help>
+  <formElement>
+    <type>entry</type>
+    <label>.PEM Key Property Path:</label>
+    <property>pemKeyProperty</property>
+    <value>/myPipelineRuntime/delineaSecret/pem</value>
+    <required>0</required>
+    <documentation>Property path containing the .pem key content (default: /myPipelineRuntime/delineaSecret/pem).</documentation>
+  </formElement>
+  <formElement>
+    <type>entry</type>
+    <label>Destination File Path:</label>
+    <property>destinationFilePath</property>
+    <required>1</required>
+    <documentation>File path on the agent where the .pem key will be written (e.g. ~/.ssh/id_rsa or /tmp/delinea.pem).</documentation>
+  </formElement>
+  <formElement>
+    <type>entry</type>
+    <label>File Permissions:</label>
+    <property>filePermissions</property>
+    <value>0600</value>
+    <required>0</required>
+    <documentation>POSIX permissions for the written file (default: 0600 for SSH private keys).</documentation>
+  </formElement>
+  <formElement>
+    <type>checkbox</type>
+    <label>Overwrite Existing File:</label>
+    <property>overwrite</property>
+    <checkedValue>true</checkedValue>
+    <uncheckedValue>false</uncheckedValue>
+    <value>true</value>
+    <required>0</required>
+    <documentation>Whether to overwrite destination file if it already exists.</documentation>
+  </formElement>
+  <formElement>
+    <type>entry</type>
+    <label>Output Property Sheet:</label>
+    <property>resultPropertySheet</property>
+    <value>/myJob/pemFile</value>
+    <required>0</required>
+    <documentation>CDRO property sheet where output metadata will be saved.</documentation>
+  </formElement>
+</editor>

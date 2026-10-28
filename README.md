@@ -80,8 +80,9 @@ EC-DelineaSecretServer/
 ├── src/test/groovy/                  # Spock unit test suite
 ├── samples/
 │   └── pipeline.groovy               # Production-ready CloudBees CD/RO Pipeline DSL example
-├── buildPlugin.sh                    # One-step archive build script
-├── build.gradle                      # Gradle build and packaging specification
+├── pom.xml                       # Maven build descriptor (compile, test, package plugin jar)
+├── buildPlugin.sh                # Universal build script (auto-detects Maven or Gradle)
+├── build.gradle                  # Gradle build and packaging specification
 └── settings.gradle
 ```
 
@@ -89,18 +90,30 @@ EC-DelineaSecretServer/
 
 ## Building and Packaging the Plugin
 
-Run the included build script:
+### Option 1: Using Maven (Recommended if using Maven)
+To compile, run the Spock test suite, and package the CDRO plugin:
+```bash
+# Run unit tests
+mvn clean test
 
+# Package the CDRO plugin jar
+mvn clean package
+```
+This generates the plugin archive in both:
+- `target/EC-DelineaSecretServer-1.0.0.jar`
+- `build/plugins/EC-DelineaSecretServer-1.0.0.jar`
+
+### Option 2: Using the Universal Build Script
 ```bash
 chmod +x buildPlugin.sh
 ./buildPlugin.sh
 ```
+The build script automatically detects Maven (`mvn`) or Gradle (`./gradlew`) and packages the plugin.
 
-This generates `build/plugins/EC-DelineaSecretServer-1.0.0.jar`.
-
-To run the full unit test suite:
+### Option 3: Using Gradle
 ```bash
 ./gradlew test
+./gradlew packagePlugin
 ```
 
 ---
